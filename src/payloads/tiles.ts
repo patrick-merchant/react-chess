@@ -3,9 +3,9 @@ import { Code } from "../components/tile/types";
 
 export const halfLetters = ["a", "c", "e", "g"];
 
-const letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+export const letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
-const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+export const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export const generateCodes = () => {
   const tiles: Code[] = [];
