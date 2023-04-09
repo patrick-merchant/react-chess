@@ -6,7 +6,7 @@ export const Label: FC<ILabelProps> = ({ ...props }) => {
   return props.side === Side.LEFT ? (
     <div className="absolute -left-16 w-16 h-[512px] flex flex-col">
       {numbers.map((number) => (
-        <div className="w-16 h-16 flex">
+        <div key={number} className="w-16 h-16 flex">
           <p className="m-auto">{number}</p>
         </div>
       ))}
@@ -14,7 +14,7 @@ export const Label: FC<ILabelProps> = ({ ...props }) => {
   ) : props.side === Side.TOP ? (
     <div className="absolute -top-16 w-[512px] h-16 flex flex-row">
       {letters.map((letter) => (
-        <div className="w-16 h-16 flex">
+        <div key={letter} className="w-16 h-16 flex">
           <p className="m-auto">{letter}</p>
         </div>
       ))}
@@ -22,7 +22,7 @@ export const Label: FC<ILabelProps> = ({ ...props }) => {
   ) : props.side === Side.RIGHT ? (
     <div className="absolute -right-16 w-16 h-[512px] flex flex-col">
       {numbers.map((number) => (
-        <div className="w-16 h-16 flex">
+        <div key={number} className="w-16 h-16 flex">
           <p className="m-auto">{number}</p>
         </div>
       ))}
@@ -30,7 +30,7 @@ export const Label: FC<ILabelProps> = ({ ...props }) => {
   ) : (
     <div className="absolute -bottom-16 h-16 w-[512px] flex flex-row">
       {letters.map((letter) => (
-        <div className="w-16 h-16 flex">
+        <div key={letter} className="w-16 h-16 flex">
           <p className="m-auto">{letter}</p>
         </div>
       ))}

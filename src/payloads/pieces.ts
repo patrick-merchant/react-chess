@@ -1,3 +1,4 @@
+import { faChessBishop, faChessKing, faChessKnight, faChessPawn, faChessQueen, faChessRook } from "@fortawesome/free-solid-svg-icons";
 import { IPieceProps, PieceType } from "../components/piece/types";
 import { letters } from "./tiles";
 
@@ -26,6 +27,7 @@ export const addWhitePawns = (pieces: IPieceProps[]) => {
       isWhite: true,
       isTaken: false,
       type: PieceType.PAWN,
+      icon: faChessPawn,
       location: {
         letter: letters[i],
         number: 2,
@@ -41,6 +43,7 @@ export const addBlackPawns = (pieces: IPieceProps[]) => {
       isWhite: false,
       isTaken: false,
       type: PieceType.PAWN,
+      icon: faChessPawn,
       location: {
         letter: letters[i],
         number: 7,
@@ -51,11 +54,12 @@ export const addBlackPawns = (pieces: IPieceProps[]) => {
 };
 
 export const addWhiteRooks = (pieces: IPieceProps[]) => {
-  for (let i = 0; i < 8; i + 7) {
+  for (let i = 0; i < 8; i = i + 7) {
     const rook: IPieceProps = {
       isWhite: true,
       isTaken: false,
       type: PieceType.ROOK,
+      icon: faChessRook,
       location: {
         letter: letters[i],
         number: 1,
@@ -66,11 +70,12 @@ export const addWhiteRooks = (pieces: IPieceProps[]) => {
 };
 
 export const addBlackRooks = (pieces: IPieceProps[]) => {
-  for (let i = 0; i < 8; i + 7) {
+  for (let i = 0; i < 8; i = i + 7) {
     const rook: IPieceProps = {
       isWhite: false,
       isTaken: false,
       type: PieceType.ROOK,
+      icon: faChessRook,
       location: {
         letter: letters[i],
         number: 8,
@@ -81,11 +86,12 @@ export const addBlackRooks = (pieces: IPieceProps[]) => {
 };
 
 export const addWhiteBishops = (pieces: IPieceProps[]) => {
-  for (let i = 2; i < 5; i + 3) {
+  for (let i = 2; i < 6; i = i + 3) {
     const bishop: IPieceProps = {
       isWhite: true,
       isTaken: false,
       type: PieceType.BISHOP,
+      icon: faChessBishop,
       location: {
         letter: letters[i],
         number: 1,
@@ -96,11 +102,12 @@ export const addWhiteBishops = (pieces: IPieceProps[]) => {
 };
 
 export const addBlackBishops = (pieces: IPieceProps[]) => {
-  for (let i = 2; i < 5; i + 3) {
+  for (let i = 2; i < 6; i = i + 3) {
     const bishop: IPieceProps = {
       isWhite: false,
       isTaken: false,
       type: PieceType.BISHOP,
+      icon: faChessBishop,
       location: {
         letter: letters[i],
         number: 8,
@@ -111,11 +118,12 @@ export const addBlackBishops = (pieces: IPieceProps[]) => {
 };
 
 export const addWhiteKnights = (pieces: IPieceProps[]) => {
-  for (let i = 1; i < 7; i + 5) {
+  for (let i = 1; i < 7; i = i + 5) {
     const knight: IPieceProps = {
       isWhite: true,
       isTaken: false,
       type: PieceType.KNIGHT,
+      icon: faChessKnight,
       location: {
         letter: letters[i],
         number: 1,
@@ -126,11 +134,12 @@ export const addWhiteKnights = (pieces: IPieceProps[]) => {
 };
 
 export const addBlackKnights = (pieces: IPieceProps[]) => {
-  for (let i = 1; i < 7; i + 5) {
+  for (let i = 1; i < 7; i = i + 5) {
     const knight: IPieceProps = {
       isWhite: false,
       isTaken: false,
       type: PieceType.KNIGHT,
+      icon: faChessKnight,
       location: {
         letter: letters[i],
         number: 8,
@@ -145,6 +154,7 @@ export const addWhiteQueen = (pieces: IPieceProps[]) => {
     isWhite: true,
     isTaken: false,
     type: PieceType.QUEEN,
+    icon: faChessQueen,
     location: {
       letter: "d",
       number: 1,
@@ -158,11 +168,13 @@ export const addBlackQueen = (pieces: IPieceProps[]) => {
     isWhite: false,
     isTaken: false,
     type: PieceType.QUEEN,
+    icon: faChessQueen,
     location: {
       letter: "e",
       number: 8,
     },
   };
+  pieces.push(queen)
 };
 
 export const addWhiteKing = (pieces: IPieceProps[]) => {
@@ -170,6 +182,7 @@ export const addWhiteKing = (pieces: IPieceProps[]) => {
     isWhite: true,
     isTaken: false,
     type: PieceType.KING,
+    icon: faChessKing,
     location: {
       letter: "e",
       number: 1,
@@ -183,6 +196,7 @@ export const addBlackKing = (pieces: IPieceProps[]) => {
     isWhite: false,
     isTaken: false,
     type: PieceType.KING,
+    icon: faChessKing,
     location: {
       letter: "d",
       number: 8,

@@ -1,4 +1,3 @@
-import { ITileProps } from "../components/tile/types";
 import { Code } from "../components/tile/types";
 
 export const halfLetters = ["a", "c", "e", "g"];
@@ -10,8 +9,8 @@ export const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
 export const generateCodes = () => {
   const tiles: Code[] = [];
 
-  letters.forEach((letter) => {
-    numbers.forEach((number) => {
+  numbers.forEach((number) => {
+    letters.forEach((letter) => {
       const code: Code = {
         letter: letter,
         number: number,
