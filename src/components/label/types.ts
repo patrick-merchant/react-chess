@@ -1,7 +1,7 @@
 import { HTMLAttributes } from "react";
 
 export interface ILabelProps extends HTMLAttributes<HTMLDivElement> {
-  side: Side;
+  side: Side | string;
 }
 
 export enum Side {

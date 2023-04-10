@@ -1,11 +1,12 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { Board } from "./components/board";
-import { addPieces } from "./payloads/pieces";
 
 function App() {
-  return <Board />;
+  return (
+  <div className="flex justify-center">
+    <Board />
+  </div>
+  );
 }
 
 export default App;

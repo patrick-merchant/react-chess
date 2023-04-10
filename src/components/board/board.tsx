@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { addPieces } from "../../payloads/pieces";
 import { generateCodes } from "../../payloads/tiles";
 import { Label } from "../label";
@@ -8,6 +8,11 @@ import { Code } from "../tile/types";
 import { IBoardProps } from "./types";
 
 export const Board: FC<IBoardProps> = () => {
+
+  const [targetPosition, setTargetPosition] = useState(null)
+  const [initial, setInitial] = useState(null)
+  const [isWhiteTurn, setIsWhiteTurn] = useState(true)
+
   const tiles = generateCodes();
   const pieces = addPieces();
 
@@ -22,18 +27,31 @@ export const Board: FC<IBoardProps> = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("inital: ", initial);
+  })
+
+  useEffect(() => {
+    console.log("targetPosition: ", targetPosition);
+  })
+
   return (
-    <div className="relative left-16 top-16 w-[512px] border border-black">
-      <Label side={Side.LEFT} />
-      <Label side={Side.TOP} />
-      <Label side={Side.RIGHT} />
-      <Label side={Side.BOTTOM} />
+    <div className="relative mt-32 border border-black">
+      {Object.values(Side).map((side) => (
+         <Label key={side} side={side}/>
+      ))}
       <div className="grid grid-cols-8">
         {tiles.map((tile) => (
           <Tile
             key={tile.letter + tile.number}
             code={tile}
-            pieceProps={matchCodes(tile)}
+            startingPieceProps={matchCodes(tile)}
+            targetPosition={targetPosition}
+            setTargetPosition={setTargetPosition}
+            initial={initial}
+            setInitial={setInitial}
+            isWhiteTurn={isWhiteTurn}
+            setIsWhiteTurn={setIsWhiteTurn}
           />
         ))}
       </div>

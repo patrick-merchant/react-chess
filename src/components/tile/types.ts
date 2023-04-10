@@ -2,10 +2,21 @@ import { IPieceProps } from "../piece/types";
 
 export interface ITileProps {
   code: Code;
-  pieceProps?: IPieceProps | undefined;
+  startingPieceProps: IPieceProps | undefined;
+  targetPosition: Code | null;
+  setTargetPosition: React.Dispatch<React.SetStateAction<any>>;
+  initial: Initial | null;
+  setInitial: React.Dispatch<React.SetStateAction<any>>;
+  isWhiteTurn: boolean;
+  setIsWhiteTurn: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type Code = {
   letter: string;
   number: number;
 };
+
+export type Initial = {
+  code: Code;
+  pieceProps: IPieceProps;
+}
