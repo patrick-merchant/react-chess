@@ -4,7 +4,7 @@ import { Piece } from "../piece";
 import { Code, ITileProps } from "./types";
 import { IPieceProps } from "../piece/types";
 
-export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition, setTargetPosition, initial, setInitial, isWhiteTurn, setIsWhiteTurn }) => {
+export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition, setTargetPosition, initial, setInitial, isWhiteTurn, setIsWhiteTurn, takenPieces, setTakenPieces }) => {
   const [isInitial, setIsInitial] = useState(false);
   const [isTarget, setIsTarget] = useState(false);
   const [statefulPieceProps, setStatefulPieceProps] = useState(startingPieceProps)
@@ -30,16 +30,25 @@ export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition,
       setTargetPosition(code);
       setStatefulPieceProps(initial.pieceProps)
       setInitial(null);
-    } else if (statefulPieceProps && (initial?.code.letter !== code.letter && initial?.code.number !== code.number)) {
-      // if tile has a piece on it and that piece is not at the same position as the initially selected piece:
+    } else if (statefulPieceProps && initial && !((initial?.code.letter === code.letter) && (initial?.code.number === code.number)) && (statefulPieceProps?.isWhite != initial?.pieceProps.isWhite)) {
+      // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
       console.log("case 2");
+      
+      setTakenPieces([...takenPieces, statefulPieceProps]);
+      setStatefulPieceProps(initial?.pieceProps);
+      setInitial(null);
+    } else if ((statefulPieceProps && !((initial?.code.letter === code.letter) && (initial?.code.number === code.number)) && (statefulPieceProps?.isWhite == initial?.pieceProps.isWhite)) || (statefulPieceProps && !initial)) {
+      // if tile has a piece on it and that piece is not at the same position as the initially selected piece, but is the same color:
+      console.log("case 3");
       console.log("code", code);
       console.log("IP", initial);
+      console.log("SPP: ", statefulPieceProps);
+
       setInitial({code: code, pieceProps: statefulPieceProps});
       setStatefulPieceProps(undefined);
     } else {
       // if tile is the same as initial.
-      console.log("case 3");
+      console.log("case 4");
       console.log("code: ", code);
       console.log("initial: ", initial);
       console.log("SPP: ", statefulPieceProps);
@@ -60,7 +69,6 @@ export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition,
         {statefulPieceProps && (
           <Piece
             isWhite={statefulPieceProps.isWhite}
-            isTaken={statefulPieceProps.isTaken}
             location={statefulPieceProps.location}
             type={statefulPieceProps.type}
             icon={statefulPieceProps.icon}
@@ -74,7 +82,6 @@ export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition,
         {statefulPieceProps && (
           <Piece
             isWhite={statefulPieceProps.isWhite}
-            isTaken={statefulPieceProps.isTaken}
             location={statefulPieceProps.location}
             type={statefulPieceProps.type}
             icon={statefulPieceProps.icon}

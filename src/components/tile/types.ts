@@ -9,6 +9,8 @@ export interface ITileProps {
   setInitial: React.Dispatch<React.SetStateAction<any>>;
   isWhiteTurn: boolean;
   setIsWhiteTurn: React.Dispatch<React.SetStateAction<boolean>>;
+  takenPieces: Array<IPieceProps>;
+  setTakenPieces: React.Dispatch<React.SetStateAction<Array<IPieceProps>>>;
 }
 
 export type Code = {

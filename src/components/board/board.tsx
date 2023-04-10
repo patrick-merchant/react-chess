@@ -6,12 +6,14 @@ import { Side } from "../label/types";
 import { Tile } from "../tile";
 import { Code } from "../tile/types";
 import { IBoardProps } from "./types";
+import { TakenPieces } from "../taken-pieces";
 
 export const Board: FC<IBoardProps> = () => {
 
-  const [targetPosition, setTargetPosition] = useState(null)
-  const [initial, setInitial] = useState(null)
-  const [isWhiteTurn, setIsWhiteTurn] = useState(true)
+  const [targetPosition, setTargetPosition] = useState(null);
+  const [initial, setInitial] = useState(null);
+  const [isWhiteTurn, setIsWhiteTurn] = useState(true);
+  const [takenPieces, setTakenPieces] = useState(new Array);
 
   const tiles = generateCodes();
   const pieces = addPieces();
@@ -36,6 +38,7 @@ export const Board: FC<IBoardProps> = () => {
   })
 
   return (
+    <div className="flex flex-col space-y-16">
     <div className="relative mt-32 border border-black">
       {Object.values(Side).map((side) => (
          <Label key={side} side={side}/>
@@ -52,9 +55,13 @@ export const Board: FC<IBoardProps> = () => {
             setInitial={setInitial}
             isWhiteTurn={isWhiteTurn}
             setIsWhiteTurn={setIsWhiteTurn}
+            takenPieces={takenPieces}
+            setTakenPieces={setTakenPieces}
           />
         ))}
       </div>
+    </div>
+    <TakenPieces takenPieces={takenPieces}/>
     </div>
   );
 };
