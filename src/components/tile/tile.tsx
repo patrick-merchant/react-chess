@@ -3,7 +3,10 @@ import { halfLetters } from "../../payloads/tiles";
 import { Piece } from "../piece";
 import { ITileProps } from "./types";
 import { PieceClass } from "../piece/class";
-import { checkAllowedMoves } from "../move-constraints/move-constraints";
+import {
+  checkAllowedMoves,
+  checkIfPieceInWay,
+} from "../move-constraints/move-constraints";
 
 export const Tile: FC<ITileProps> = ({
   code,
@@ -39,12 +42,21 @@ export const Tile: FC<ITileProps> = ({
   const handleMove = (startPosition: string, endPosition: string) => {
     const pieceToMove = statefulPieces.get(startPosition);
 
+    // check if there is a piece in the way of the move's path
+    const isPieceInWay = checkIfPieceInWay(
+      startPosition,
+      endPosition,
+      statefulPieces,
+      pieceToMove
+    );
+
+    if (isPieceInWay) {
+      console.log("Invalid move: Piece in move path");
+      return;
+    }
+
     if (pieceToMove) {
-      const allowedMoves = checkAllowedMoves(
-        pieceToMove,
-        startPosition,
-        endPosition
-      );
+      const allowedMoves = checkAllowedMoves(pieceToMove, startPosition);
       console.log(allowedMoves);
       if (!allowedMoves?.includes(endPosition)) {
         console.log("move not permitted");
