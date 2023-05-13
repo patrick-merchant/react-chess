@@ -46,6 +46,8 @@ export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition,
 
       setInitial({code: code, pieceProps: statefulPieceProps});
       setStatefulPieceProps(undefined);
+      // need to fix logic where initial piece of same colour disappears when same colour is selected.
+      // Maybe just add this case to "can't move there" error for now?
     } else {
       // if tile is the same as initial.
       console.log("case 4");
