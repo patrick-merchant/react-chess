@@ -1,92 +1,122 @@
 import { FC, useEffect, useState } from "react";
 import { halfLetters } from "../../payloads/tiles";
 import { Piece } from "../piece";
-import { Code, ITileProps } from "./types";
-import { IPieceProps } from "../piece/types";
+import { ITileProps } from "./types";
+import { PieceClass } from "../piece/types";
 
-export const Tile: FC<ITileProps> = ({ code, startingPieceProps, targetPosition, setTargetPosition, initial, setInitial, isWhiteTurn, setIsWhiteTurn, takenPieces, setTakenPieces }) => {
+export const Tile: FC<ITileProps> = ({
+  code,
+  piece,
+  targetPosition,
+  setTargetPosition,
+  initial,
+  setInitial,
+  takenPieces,
+  setTakenPieces,
+  statefulPieces,
+  setStatefulPieces,
+  isWhiteTurn,
+  setIsWhiteTurn,
+}) => {
   const [isInitial, setIsInitial] = useState(false);
   const [isTarget, setIsTarget] = useState(false);
-  const [statefulPieceProps, setStatefulPieceProps] = useState(startingPieceProps)
 
   useEffect(() => {
-    if (initial?.code.letter === code.letter && initial?.code.number === code.number) {
+    if (initial === code) {
       setIsInitial(true);
     } else {
-      setIsInitial(false)
+      setIsInitial(false);
     }
 
-    if (targetPosition?.letter === code.letter && targetPosition?.number === code.number) {
+    if (targetPosition == code) {
       setIsTarget(false);
     } else {
       setIsTarget(false);
     }
-  }, [initial, targetPosition])
+  }, [initial, targetPosition]);
 
-  const handleClick = (code: Code, statefulPieceProps?: IPieceProps) => {
-    if(!statefulPieceProps && initial) {
+  const handleMove = (startPosition: string, endPosition: string) => {
+    const pieceToMove = statefulPieces.get(startPosition);
+    if (pieceToMove) {
+      let tempStateful = statefulPieces;
+      tempStateful.set(endPosition, pieceToMove);
+      tempStateful.delete(startPosition);
+      setStatefulPieces(tempStateful);
+    }
+  };
+
+  const handleClick = (code: string, piece: PieceClass | null) => {
+    if (!piece && initial) {
       // if tile has no piece on it and an initial piece has been selected:
       console.log("case 1");
       setTargetPosition(code);
-      setStatefulPieceProps(initial.pieceProps)
+      handleMove(initial, code);
       setInitial(null);
-    } else if (statefulPieceProps && initial && !((initial?.code.letter === code.letter) && (initial?.code.number === code.number)) && (statefulPieceProps?.isWhite != initial?.pieceProps.isWhite)) {
+    } else if (
+      piece &&
+      initial &&
+      !(initial == code) &&
+      piece?.getIsWhite() != statefulPieces.get(initial)?.getIsWhite()
+    ) {
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
       console.log("case 2");
-      
-      setTakenPieces([...takenPieces, statefulPieceProps]);
-      setStatefulPieceProps(initial?.pieceProps);
+      handleMove(initial, code);
+      setTakenPieces([...takenPieces, piece]);
       setInitial(null);
-    } else if ((statefulPieceProps && !((initial?.code.letter === code.letter) && (initial?.code.number === code.number)) && (statefulPieceProps?.isWhite == initial?.pieceProps.isWhite)) || (statefulPieceProps && !initial)) {
+    } else if (
+      (piece &&
+        initial &&
+        !(initial == code) &&
+        piece.getIsWhite() == statefulPieces.get(initial)?.getIsWhite()) ||
+      (piece && !initial)
+    ) {
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, but is the same color:
       console.log("case 3");
-      console.log("code", code);
-      console.log("IP", initial);
-      console.log("SPP: ", statefulPieceProps);
-
-      setInitial({code: code, pieceProps: statefulPieceProps});
-      setStatefulPieceProps(undefined);
-      // need to fix logic where initial piece of same colour disappears when same colour is selected.
-      // Maybe just add this case to "can't move there" error for now?
+      setInitial(code);
     } else {
       // if tile is the same as initial.
       console.log("case 4");
-      console.log("code: ", code);
-      console.log("initial: ", initial);
-      console.log("SPP: ", statefulPieceProps);
-      
-      
-      setStatefulPieceProps(initial?.pieceProps)
-      setInitial(null)
+      setInitial(null);
     }
-  }
-  
+  };
+
   if (
-    (code.number % 2 === 0 && halfLetters.includes(code.letter)) ||
-    (code.number % 2 !== 0 && !halfLetters.includes(code.letter))
+    (Number(code[1]) % 2 === 0 && halfLetters.includes(code[0])) ||
+    (Number(code[1]) % 2 !== 0 && !halfLetters.includes(code[0]))
   ) {
     return (
-      <div id={code.letter + code.number} className={`w-16 h-16 bg-orange-300 ${isInitial || isTarget ? "opacity-70" : "opacity-100"}`} onClick={() => handleClick(code, statefulPieceProps)} 
+      <div
+        id={code}
+        className={`w-16 h-16 bg-yellow-700 ${
+          isInitial || isTarget ? "opacity-70" : "opacity-100"
+        }`}
+        onClick={() => handleClick(code, piece)}
       >
-        {statefulPieceProps && (
+        {piece && (
           <Piece
-            isWhite={statefulPieceProps.isWhite}
-            location={statefulPieceProps.location}
-            type={statefulPieceProps.type}
-            icon={statefulPieceProps.icon}
+            isWhite={piece.getIsWhite()}
+            icon={piece.getIcon()}
+            type={piece.getType()}
+            pieceSize={piece.getPieceSize()}
           />
         )}
       </div>
     );
   } else {
     return (
-      <div id={code.letter + code.number} className={`w-16 h-16 bg-yellow-700 ${isInitial || isTarget ? "opacity-70" : "opacity-100"}`} onClick={() => handleClick(code, statefulPieceProps)} >
-        {statefulPieceProps && (
+      <div
+        id={code}
+        className={`w-16 h-16 bg-orange-300 ${
+          isInitial || isTarget ? "opacity-70" : "opacity-100"
+        }`}
+        onClick={() => handleClick(code, piece)}
+      >
+        {piece && (
           <Piece
-            isWhite={statefulPieceProps.isWhite}
-            location={statefulPieceProps.location}
-            type={statefulPieceProps.type}
-            icon={statefulPieceProps.icon}
+            isWhite={piece.getIsWhite()}
+            icon={piece.getIcon()}
+            type={piece.getType()}
+            pieceSize={piece.getPieceSize()}
           />
         )}
       </div>

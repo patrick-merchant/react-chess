@@ -1,12 +1,21 @@
 import { FC } from "react";
 import { IPieceProps } from "./types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { v4 as uuidv4 } from "uuid";
 
-export const Piece: FC<IPieceProps> = ({ ...props }) => {
-
+export const Piece: FC<IPieceProps> = ({
+  isWhite,
+  icon,
+  pieceSize,
+}: IPieceProps) => {
+  const safeId = uuidv4();
   return (
-    <div id={props.location.letter + props.location.number} className="flex h-full justify-center items-center">
-      <FontAwesomeIcon icon={props.icon} color={props.isWhite ? "white" : "black"} size={props.pieceSize ? props.pieceSize : "3x"}/>
+    <div id={safeId} className="flex h-full justify-center items-center">
+      <FontAwesomeIcon
+        icon={icon}
+        color={isWhite ? "white" : "black"}
+        size={pieceSize ? pieceSize : "3x"}
+      />
     </div>
   );
 };

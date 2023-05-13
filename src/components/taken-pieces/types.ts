@@ -1,5 +1,5 @@
-import { IPieceProps } from "../piece/types";
+import { PieceClass } from "../piece/types";
 
 export interface ITakenPieceProps {
-    takenPieces: Array<IPieceProps>;
+  takenPieces: Array<PieceClass>;
 }
