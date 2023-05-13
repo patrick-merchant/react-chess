@@ -2,10 +2,11 @@ import { letters, numbers } from "../../payloads/tiles";
 import { PieceClass } from "../piece/class";
 import { PieceType } from "../piece/types";
 
-export const checkAllowedMoves = (
+export const checkPieceMoveAbility = (
   piece: PieceClass | null,
-  startPosition: string
-): Array<string> => {
+  startPosition: string,
+  endPosition: string
+): boolean => {
   const allowedEndPositions = new Array<string>();
   const letterIndex = letters.indexOf(startPosition[0]);
   const numberIndex = numbers.indexOf(startPosition[1]);
@@ -35,18 +36,34 @@ export const checkAllowedMoves = (
     allowedEndPositions.push(
       letters[letterIndex - 1] + numbers[numberIndex - 2]
     );
+
+    if (allowedEndPositions.includes(endPosition)) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (piece?.getType() == PieceType.ROOK) {
+    if (
+      // rook can only move straight lines
+      endPosition[0] === startPosition[0] ||
+      endPosition[1] == startPosition[1]
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
-  return allowedEndPositions;
+  return false;
 };
 
 export const checkIfPieceInWay = (
   startPosition: string,
   endPosition: string,
   statefulPieces: Map<string, PieceClass>,
-  pieceToMove: PieceClass | undefined
-) => {
+  pieceToMove: PieceClass
+): boolean => {
   // Not an issue for Knights.
-  if (pieceToMove?.getType() === PieceType.KNIGHT) {
+  if (pieceToMove.getType() === PieceType.KNIGHT) {
     return false;
   }
 

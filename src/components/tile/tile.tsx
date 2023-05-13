@@ -4,7 +4,7 @@ import { Piece } from "../piece";
 import { ITileProps } from "./types";
 import { PieceClass } from "../piece/class";
 import {
-  checkAllowedMoves,
+  checkPieceMoveAbility,
   checkIfPieceInWay,
 } from "../move-constraints/move-constraints";
 
@@ -42,30 +42,34 @@ export const Tile: FC<ITileProps> = ({
   const handleMove = (startPosition: string, endPosition: string) => {
     const pieceToMove = statefulPieces.get(startPosition);
 
-    // check if there is a piece in the way of the move's path
-    const isPieceInWay = checkIfPieceInWay(
-      startPosition,
-      endPosition,
-      statefulPieces,
-      pieceToMove
-    );
-
-    if (isPieceInWay) {
-      console.log("Invalid move: Piece in move path");
-      return;
-    }
-
     if (pieceToMove) {
-      const allowedMoves = checkAllowedMoves(pieceToMove, startPosition);
-      console.log(allowedMoves);
-      if (!allowedMoves?.includes(endPosition)) {
-        console.log("move not permitted");
-      } else {
-        let tempStateful = statefulPieces;
-        tempStateful.set(endPosition, pieceToMove);
-        tempStateful.delete(startPosition);
-        setStatefulPieces(tempStateful);
+      // check if there is a piece in the way of the move's path
+      const isPieceInWay = checkIfPieceInWay(
+        startPosition,
+        endPosition,
+        statefulPieces,
+        pieceToMove
+      );
+      if (isPieceInWay) {
+        console.log("Invalid move: Piece in move path");
+        return;
       }
+
+      // check if the move is compatible with the piece's abilities
+      const canPiecePerformMove = checkPieceMoveAbility(
+        pieceToMove,
+        startPosition,
+        endPosition
+      );
+      console.log(canPiecePerformMove);
+      if (!canPiecePerformMove) {
+        console.log("Invalid move: This piece cannot move like that");
+        return;
+      }
+      let tempStateful = statefulPieces;
+      tempStateful.set(endPosition, pieceToMove);
+      tempStateful.delete(startPosition);
+      setStatefulPieces(tempStateful);
     }
   };
 
