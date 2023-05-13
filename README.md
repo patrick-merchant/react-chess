@@ -18,6 +18,7 @@ Need to add:
 - Castling.
 - En Passant
 - Game win conditions.
+- Error handling e.g. for piece-taking behind piece bug.
 
 ## NTH:
 

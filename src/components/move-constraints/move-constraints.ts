@@ -2,6 +2,41 @@ import { letters, numbers } from "../../payloads/tiles";
 import { PieceClass } from "../piece/class";
 import { PieceType } from "../piece/types";
 
+export const isMoveHorizontal = (
+  startPosition: string,
+  endPosition: string
+) => {
+  // positions are in same row - horizontal
+  if (startPosition[1] === endPosition[1]) {
+    return true;
+  }
+  return false;
+};
+
+export const isMoveVertical = (startPosition: string, endPosition: string) => {
+  // positions are in same column - vertical
+  if (startPosition[0] === endPosition[0]) {
+    return true;
+  }
+  return false;
+};
+
+export const isMoveDiagonal = (startPosition: string, endPosition: string) => {
+  // check if horizontal and vertical diff between positions is equal
+  // positions are on diagonal
+  if (
+    Math.abs(
+      letters.indexOf(startPosition[0]) - letters.indexOf(endPosition[0])
+    ) ===
+    Math.abs(
+      numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1])
+    )
+  ) {
+    return true;
+  }
+  return false;
+};
+
 export const checkPieceMoveAbility = (
   piece: PieceClass | null,
   startPosition: string,
@@ -12,6 +47,7 @@ export const checkPieceMoveAbility = (
   const numberIndex = numbers.indexOf(startPosition[1]);
 
   if (piece?.getType() == PieceType.KNIGHT) {
+    // knight can move 2 spaces in one direction, 1 in the other - not diagonal
     allowedEndPositions.push(
       letters[letterIndex + 2] + numbers[numberIndex + 1]
     );
@@ -45,8 +81,28 @@ export const checkPieceMoveAbility = (
   } else if (piece?.getType() == PieceType.ROOK) {
     if (
       // rook can only move straight lines
-      endPosition[0] === startPosition[0] ||
-      endPosition[1] == startPosition[1]
+      isMoveHorizontal(startPosition, endPosition) ||
+      isMoveVertical(startPosition, endPosition)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (piece?.getType() == PieceType.BISHOP) {
+    if (
+      // bishop can only move on diagonals
+      isMoveDiagonal(startPosition, endPosition)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (piece?.getType() == PieceType.QUEEN) {
+    if (
+      // queen can move in any direction
+      isMoveHorizontal(startPosition, endPosition) ||
+      isMoveVertical(startPosition, endPosition) ||
+      isMoveDiagonal(startPosition, endPosition)
     ) {
       return true;
     } else {
@@ -69,8 +125,7 @@ export const checkIfPieceInWay = (
 
   let allowedMoves = new Array<string>();
   // All other pieces will move diagonally, horizontally, or vertically.
-  if (startPosition[0] === endPosition[0]) {
-    // positions are in same column - vertical
+  if (isMoveVertical(startPosition, endPosition)) {
     if (numbers.indexOf(startPosition[1]) < numbers.indexOf(endPosition[1])) {
       for (
         let i = numbers.indexOf(startPosition[1]) + 1;
@@ -96,8 +151,7 @@ export const checkIfPieceInWay = (
         }
       }
     }
-  } else if (startPosition[1] === endPosition[1]) {
-    // positions are in same row - horizontal
+  } else if (isMoveHorizontal(startPosition, endPosition)) {
     if (letters.indexOf(startPosition[0]) < letters.indexOf(endPosition[0])) {
       for (
         let i = letters.indexOf(startPosition[0]) + 1;
@@ -123,16 +177,7 @@ export const checkIfPieceInWay = (
         }
       }
     }
-  } else if (
-    Math.abs(
-      letters.indexOf(startPosition[0]) - letters.indexOf(endPosition[0])
-    ) ===
-    Math.abs(
-      numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1])
-    )
-  ) {
-    // check if horizontal and vertical diff between positions is equal
-    // positions are on diagonal
+  } else if (isMoveDiagonal(startPosition, endPosition)) {
     if (
       letters.indexOf(startPosition[0]) < letters.indexOf(endPosition[0]) &&
       numbers.indexOf(startPosition[1]) < numbers.indexOf(endPosition[1])
