@@ -6,7 +6,7 @@ import { Tile } from "../tile";
 import { IBoardProps } from "./types";
 import { TakenPieces } from "../taken-pieces";
 import { addPieces } from "../../payloads/pieces";
-import { PieceClass } from "../piece/types";
+import { PieceClass } from "../piece/class";
 
 export const Board: FC<IBoardProps> = () => {
   const [targetPosition, setTargetPosition] = useState(null);

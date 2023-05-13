@@ -7,7 +7,8 @@ import {
   faChessRook,
   faL,
 } from "@fortawesome/free-solid-svg-icons";
-import { PieceClass, PieceType } from "../components/piece/types";
+import { PieceType } from "../components/piece/types";
+import { PieceClass } from "../components/piece/class";
 
 export const addPieces = () => {
   const pieceMappings: Map<string, PieceClass> = new Map();

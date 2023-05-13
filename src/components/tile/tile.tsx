@@ -2,7 +2,8 @@ import { FC, useEffect, useState } from "react";
 import { halfLetters } from "../../payloads/tiles";
 import { Piece } from "../piece";
 import { ITileProps } from "./types";
-import { PieceClass } from "../piece/types";
+import { PieceClass } from "../piece/class";
+import { checkAllowedMoves } from "../move-constraints/move-constraints";
 
 export const Tile: FC<ITileProps> = ({
   code,
@@ -37,11 +38,22 @@ export const Tile: FC<ITileProps> = ({
 
   const handleMove = (startPosition: string, endPosition: string) => {
     const pieceToMove = statefulPieces.get(startPosition);
+
     if (pieceToMove) {
-      let tempStateful = statefulPieces;
-      tempStateful.set(endPosition, pieceToMove);
-      tempStateful.delete(startPosition);
-      setStatefulPieces(tempStateful);
+      const allowedMoves = checkAllowedMoves(
+        pieceToMove,
+        startPosition,
+        endPosition
+      );
+      console.log(allowedMoves);
+      if (!allowedMoves?.includes(endPosition)) {
+        console.log("move not permitted");
+      } else {
+        let tempStateful = statefulPieces;
+        tempStateful.set(endPosition, pieceToMove);
+        tempStateful.delete(startPosition);
+        setStatefulPieces(tempStateful);
+      }
     }
   };
 
