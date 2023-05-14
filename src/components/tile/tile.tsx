@@ -67,6 +67,12 @@ export const Tile: FC<ITileProps> = ({
         console.log("Invalid move: This piece cannot move like that");
         return;
       }
+
+      // place taken piece next to board
+      if (statefulPieces.get(endPosition)) {
+        setTakenPieces([...takenPieces, pieceToMove]);
+      }
+
       let tempStateful = statefulPieces;
       tempStateful.set(endPosition, pieceToMove);
       tempStateful.delete(startPosition);
@@ -90,7 +96,6 @@ export const Tile: FC<ITileProps> = ({
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
       console.log("case 2");
       handleMove(initial, code);
-      setTakenPieces([...takenPieces, piece]);
       setInitial(null);
     } else if (
       (piece &&
