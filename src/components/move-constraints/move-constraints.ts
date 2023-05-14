@@ -108,6 +108,23 @@ export const checkPieceMoveAbility = (
     } else {
       return false;
     }
+  } else if (piece?.getType() == PieceType.KING) {
+    if (
+      // king can move in any direction, but only one square
+      (isMoveHorizontal(startPosition, endPosition) ||
+        isMoveVertical(startPosition, endPosition) ||
+        isMoveDiagonal(startPosition, endPosition)) &&
+      Math.abs(
+        numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1])
+      ) < 2 &&
+      Math.abs(
+        letters.indexOf(endPosition[0]) - letters.indexOf(startPosition[0])
+      ) < 2
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   } else if (piece?.getType() == PieceType.PAWN) {
     if (
       // pawn can only move forwards
