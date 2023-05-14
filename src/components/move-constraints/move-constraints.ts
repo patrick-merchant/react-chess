@@ -431,7 +431,6 @@ export const checkIfPieceInWay = (
       }
     }
   }
-  console.log(allowedMoves);
 
   if (allowedMoves.includes(endPosition)) {
     return false;

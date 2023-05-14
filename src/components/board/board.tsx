@@ -26,10 +26,6 @@ export const Board: FC<IBoardProps> = () => {
     return tempPiece;
   };
 
-  useEffect(() => {
-    console.log("inital: ", initial);
-  });
-
   return (
     <div className="flex flex-col space-y-16">
       <div className="relative mt-32 border border-black">

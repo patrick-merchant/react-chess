@@ -53,7 +53,6 @@ export const Tile: FC<ITileProps> = ({
         endPosition,
         statefulPieces
       );
-      console.log(canPiecePerformMove);
       if (!canPiecePerformMove) {
         console.log("Invalid move: This piece cannot move like that");
         return;
@@ -74,7 +73,6 @@ export const Tile: FC<ITileProps> = ({
   const handleClick = (code: string, piece: PieceClass | null) => {
     if (!piece && initial) {
       // if tile has no piece on it and an initial piece has been selected:
-      console.log("case 1");
       handleMove(initial, code);
       setInitial(null);
     } else if (
@@ -84,7 +82,6 @@ export const Tile: FC<ITileProps> = ({
       piece?.getIsWhite() != statefulPieces.get(initial)?.getIsWhite()
     ) {
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
-      console.log("case 2");
       handleMove(initial, code);
       setInitial(null);
     } else if (
@@ -95,11 +92,9 @@ export const Tile: FC<ITileProps> = ({
       (piece && !initial)
     ) {
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, but is the same color:
-      console.log("case 3");
       setInitial(code);
     } else {
       // if tile is the same as initial.
-      console.log("case 4");
       setInitial(null);
     }
   };
