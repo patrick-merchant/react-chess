@@ -22,6 +22,10 @@ export const Tile: FC<ITileProps> = ({
 }) => {
   const [isInitial, setIsInitial] = useState(false);
 
+  const toggleTurn = () => {
+    setIsWhiteTurn(!isWhiteTurn);
+  };
+
   useEffect(() => {
     if (initial === code) {
       setIsInitial(true);
@@ -60,7 +64,8 @@ export const Tile: FC<ITileProps> = ({
 
       // place taken piece next to board
       if (statefulPieces.get(endPosition)) {
-        setTakenPieces([...takenPieces, pieceToMove]);
+        const takenPiece = statefulPieces.get(endPosition);
+        takenPiece && setTakenPieces([...takenPieces, takenPiece]);
       }
 
       let tempStateful = statefulPieces;
@@ -75,6 +80,7 @@ export const Tile: FC<ITileProps> = ({
       // if tile has no piece on it and an initial piece has been selected:
       handleMove(initial, code);
       setInitial(null);
+      toggleTurn();
     } else if (
       piece &&
       initial &&
@@ -84,15 +90,24 @@ export const Tile: FC<ITileProps> = ({
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
       handleMove(initial, code);
       setInitial(null);
+      toggleTurn();
     } else if (
       (piece &&
         initial &&
         !(initial == code) &&
         piece.getIsWhite() == statefulPieces.get(initial)?.getIsWhite()) ||
-      (piece && !initial)
+      (piece?.getIsWhite() === isWhiteTurn && !initial)
     ) {
-      // if tile has a piece on it and that piece is not at the same position as the initially selected piece, but is the same color:
+      // if tile has a piece on it and that piece is not at the same position as the initially selected piece, but is the same color - OR no initial has been selected:
       setInitial(code);
+    } else if (
+      (piece &&
+        initial &&
+        !(initial == code) &&
+        piece.getIsWhite() !== statefulPieces.get(initial)?.getIsWhite()) ||
+      (piece?.getIsWhite() !== isWhiteTurn && !initial)
+    ) {
+      console.log("It is not your turn!");
     } else {
       // if tile is the same as initial.
       setInitial(null);
