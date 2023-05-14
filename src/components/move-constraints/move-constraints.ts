@@ -108,6 +108,34 @@ export const checkPieceMoveAbility = (
     } else {
       return false;
     }
+  } else if (piece?.getType() == PieceType.PAWN) {
+    if (
+      // pawn can only move forwards
+      // can move 1 vertical, or 2 vertical if on starting square
+      // can only take diagonally
+      // en passant
+      isMoveVertical(startPosition, endPosition) &&
+      piece.getIsWhite() &&
+      (numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1]) ===
+        1 ||
+        (numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1]) ===
+          2 &&
+          startPosition[1] == "2"))
+    ) {
+      return true;
+    } else if (
+      isMoveVertical(startPosition, endPosition) &&
+      !piece.getIsWhite() &&
+      (numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1]) ===
+        1 ||
+        (numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1]) ===
+          2 &&
+          startPosition[1] == "7"))
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   }
   return false;
 };
@@ -132,7 +160,11 @@ export const checkIfPieceInWay = (
         i < numbers.indexOf(endPosition[1]) + 1;
         i++
       ) {
-        if (statefulPieces.get(startPosition[0] + numbers[i]) !== undefined) {
+        if (startPosition[0] + numbers[i] == endPosition) {
+          allowedMoves.push(startPosition[0] + numbers[i]);
+        } else if (
+          statefulPieces.get(startPosition[0] + numbers[i]) !== undefined
+        ) {
           break;
         } else {
           allowedMoves.push(startPosition[0] + numbers[i]);
@@ -144,7 +176,11 @@ export const checkIfPieceInWay = (
         i > numbers.indexOf(endPosition[1]) - 1;
         i--
       ) {
-        if (statefulPieces.get(startPosition[0] + numbers[i]) !== undefined) {
+        if (startPosition[0] + numbers[i] == endPosition) {
+          allowedMoves.push(startPosition[0] + numbers[i]);
+        } else if (
+          statefulPieces.get(startPosition[0] + numbers[i]) !== undefined
+        ) {
           break;
         } else {
           allowedMoves.push(startPosition[0] + numbers[i]);
@@ -158,7 +194,11 @@ export const checkIfPieceInWay = (
         i < letters.indexOf(endPosition[0]) + 1;
         i++
       ) {
-        if (statefulPieces.get(letters[i] + startPosition[1]) !== undefined) {
+        if (letters[i] + startPosition[1] == endPosition) {
+          allowedMoves.push(letters[i] + startPosition[1]);
+        } else if (
+          statefulPieces.get(letters[i] + startPosition[1]) !== undefined
+        ) {
           break;
         } else {
           allowedMoves.push(letters[i] + startPosition[1]);
@@ -170,7 +210,11 @@ export const checkIfPieceInWay = (
         i > letters.indexOf(endPosition[0]) - 1;
         i--
       ) {
-        if (statefulPieces.get(letters[i] + startPosition[1]) !== undefined) {
+        if (letters[i] + startPosition[1] == endPosition) {
+          allowedMoves.push(letters[i] + startPosition[1]);
+        } else if (
+          statefulPieces.get(letters[i] + startPosition[1]) !== undefined
+        ) {
           break;
         } else {
           allowedMoves.push(letters[i] + startPosition[1]);
@@ -188,6 +232,21 @@ export const checkIfPieceInWay = (
         i++
       ) {
         if (
+          letters[i] +
+            numbers[
+              numbers.indexOf(startPosition[1]) +
+                (i - letters.indexOf(startPosition[0]))
+            ] ==
+          endPosition
+        ) {
+          allowedMoves.push(
+            letters[i] +
+              numbers[
+                numbers.indexOf(startPosition[1]) +
+                  (i - letters.indexOf(startPosition[0]))
+              ]
+          );
+        } else if (
           statefulPieces.get(
             letters[i] +
               numbers[
@@ -217,6 +276,21 @@ export const checkIfPieceInWay = (
         i++
       ) {
         if (
+          letters[i] +
+            numbers[
+              numbers.indexOf(startPosition[1]) -
+                (i - letters.indexOf(startPosition[0]))
+            ] ==
+          endPosition
+        ) {
+          allowedMoves.push(
+            letters[i] +
+              numbers[
+                numbers.indexOf(startPosition[1]) -
+                  (i - letters.indexOf(startPosition[0]))
+              ]
+          );
+        } else if (
           statefulPieces.get(
             letters[i] +
               numbers[
@@ -246,6 +320,21 @@ export const checkIfPieceInWay = (
         i--
       ) {
         if (
+          letters[i] +
+            numbers[
+              numbers.indexOf(startPosition[1]) +
+                (i - letters.indexOf(startPosition[0]))
+            ] ==
+          endPosition
+        ) {
+          allowedMoves.push(
+            letters[i] +
+              numbers[
+                numbers.indexOf(startPosition[1]) +
+                  (i - letters.indexOf(startPosition[0]))
+              ]
+          );
+        } else if (
           statefulPieces.get(
             letters[i] +
               numbers[
@@ -272,6 +361,21 @@ export const checkIfPieceInWay = (
         i--
       ) {
         if (
+          letters[i] +
+            numbers[
+              numbers.indexOf(startPosition[1]) +
+                (letters.indexOf(startPosition[0]) - i)
+            ] ==
+          endPosition
+        ) {
+          allowedMoves.push(
+            letters[i] +
+              numbers[
+                numbers.indexOf(startPosition[1]) +
+                  (letters.indexOf(startPosition[0]) - i)
+              ]
+          );
+        } else if (
           statefulPieces.get(
             letters[i] +
               numbers[
@@ -293,6 +397,7 @@ export const checkIfPieceInWay = (
       }
     }
   }
+  console.log(allowedMoves);
 
   if (allowedMoves.includes(endPosition)) {
     return false;
