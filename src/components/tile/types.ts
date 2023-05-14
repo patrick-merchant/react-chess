@@ -3,8 +3,6 @@ import { PieceClass } from "../piece/class";
 export interface ITileProps {
   code: string;
   piece: PieceClass | null;
-  targetPosition: string | null;
-  setTargetPosition: React.Dispatch<React.SetStateAction<any>>;
   initial: string | null;
   setInitial: React.Dispatch<React.SetStateAction<any>>;
   isWhiteTurn: boolean;

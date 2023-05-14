@@ -9,7 +9,6 @@ import { addPieces } from "../../payloads/pieces";
 import { PieceClass } from "../piece/class";
 
 export const Board: FC<IBoardProps> = () => {
-  const [targetPosition, setTargetPosition] = useState(null);
   const [initial, setInitial] = useState(null);
   const [isWhiteTurn, setIsWhiteTurn] = useState(true);
   const [takenPieces, setTakenPieces] = useState(new Array<PieceClass>());
@@ -31,10 +30,6 @@ export const Board: FC<IBoardProps> = () => {
     console.log("inital: ", initial);
   });
 
-  useEffect(() => {
-    console.log("targetPosition: ", targetPosition);
-  });
-
   return (
     <div className="flex flex-col space-y-16">
       <div className="relative mt-32 border border-black">
@@ -47,14 +42,12 @@ export const Board: FC<IBoardProps> = () => {
               key={tile}
               code={tile}
               piece={matchCodes(tile)}
-              setTargetPosition={setTargetPosition}
               initial={initial}
               setInitial={setInitial}
               isWhiteTurn={isWhiteTurn}
               setIsWhiteTurn={setIsWhiteTurn}
               takenPieces={takenPieces}
               setTakenPieces={setTakenPieces}
-              targetPosition={targetPosition}
               statefulPieces={statefulPieces}
               setStatefulPieces={setStatefulPieces}
             />

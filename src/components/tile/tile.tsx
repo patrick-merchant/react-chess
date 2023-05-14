@@ -11,8 +11,6 @@ import {
 export const Tile: FC<ITileProps> = ({
   code,
   piece,
-  targetPosition,
-  setTargetPosition,
   initial,
   setInitial,
   takenPieces,
@@ -23,7 +21,6 @@ export const Tile: FC<ITileProps> = ({
   setIsWhiteTurn,
 }) => {
   const [isInitial, setIsInitial] = useState(false);
-  const [isTarget, setIsTarget] = useState(false);
 
   useEffect(() => {
     if (initial === code) {
@@ -31,13 +28,7 @@ export const Tile: FC<ITileProps> = ({
     } else {
       setIsInitial(false);
     }
-
-    if (targetPosition == code) {
-      setIsTarget(false);
-    } else {
-      setIsTarget(false);
-    }
-  }, [initial, targetPosition]);
+  }, [initial]);
 
   const handleMove = (startPosition: string, endPosition: string) => {
     const pieceToMove = statefulPieces.get(startPosition);
@@ -84,7 +75,6 @@ export const Tile: FC<ITileProps> = ({
     if (!piece && initial) {
       // if tile has no piece on it and an initial piece has been selected:
       console.log("case 1");
-      setTargetPosition(code);
       handleMove(initial, code);
       setInitial(null);
     } else if (
@@ -122,7 +112,7 @@ export const Tile: FC<ITileProps> = ({
       <div
         id={code}
         className={`w-16 h-16 bg-yellow-700 ${
-          isInitial || isTarget ? "opacity-70" : "opacity-100"
+          isInitial ? "opacity-70" : "opacity-100"
         }`}
         onClick={() => handleClick(code, piece)}
       >
@@ -141,7 +131,7 @@ export const Tile: FC<ITileProps> = ({
       <div
         id={code}
         className={`w-16 h-16 bg-orange-300 ${
-          isInitial || isTarget ? "opacity-70" : "opacity-100"
+          isInitial ? "opacity-70" : "opacity-100"
         }`}
         onClick={() => handleClick(code, piece)}
       >
