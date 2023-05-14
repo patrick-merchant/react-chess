@@ -40,7 +40,8 @@ export const isMoveDiagonal = (startPosition: string, endPosition: string) => {
 export const checkPieceMoveAbility = (
   piece: PieceClass | null,
   startPosition: string,
-  endPosition: string
+  endPosition: string,
+  statefulPieces: Map<string, PieceClass>
 ): boolean => {
   const allowedEndPositions = new Array<string>();
   const letterIndex = letters.indexOf(startPosition[0]);
@@ -133,6 +134,7 @@ export const checkPieceMoveAbility = (
       // en passant
       isMoveVertical(startPosition, endPosition) &&
       piece.getIsWhite() &&
+      !statefulPieces.get(endPosition) &&
       (numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1]) ===
         1 ||
         (numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1]) ===
@@ -143,11 +145,26 @@ export const checkPieceMoveAbility = (
     } else if (
       isMoveVertical(startPosition, endPosition) &&
       !piece.getIsWhite() &&
+      !statefulPieces.get(endPosition) &&
       (numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1]) ===
         1 ||
         (numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1]) ===
           2 &&
           startPosition[1] == "7"))
+    ) {
+      return true;
+    } else if (
+      isMoveDiagonal(startPosition, endPosition) &&
+      piece.getIsWhite() &&
+      statefulPieces.get(endPosition) &&
+      numbers.indexOf(endPosition[1]) - numbers.indexOf(startPosition[1]) === 1
+    ) {
+      return true;
+    } else if (
+      isMoveDiagonal(startPosition, endPosition) &&
+      !piece.getIsWhite() &&
+      statefulPieces.get(endPosition) &&
+      numbers.indexOf(startPosition[1]) - numbers.indexOf(endPosition[1]) === 1
     ) {
       return true;
     } else {

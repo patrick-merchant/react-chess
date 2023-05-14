@@ -59,7 +59,8 @@ export const Tile: FC<ITileProps> = ({
       const canPiecePerformMove = checkPieceMoveAbility(
         pieceToMove,
         startPosition,
-        endPosition
+        endPosition,
+        statefulPieces
       );
       console.log(canPiecePerformMove);
       if (!canPiecePerformMove) {
