@@ -19,8 +19,10 @@ Need to add:
 - En Passant
 - Game win conditions.
 - Error handling e.g. for piece-taking behind piece bug.
+- Add custom error messages with e.g. ternaries to offer more info like whose turn it is.
 
 ## NTH:
 
 - Chess Clock?
 - Database to help sessions persist , or save games.
+- "Beginner mode" - shows available moves.

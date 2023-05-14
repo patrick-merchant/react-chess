@@ -72,15 +72,17 @@ export const Tile: FC<ITileProps> = ({
       tempStateful.set(endPosition, pieceToMove);
       tempStateful.delete(startPosition);
       setStatefulPieces(tempStateful);
+      toggleTurn();
     }
   };
 
   const handleClick = (code: string, piece: PieceClass | null) => {
+    console.log(code);
+
     if (!piece && initial) {
       // if tile has no piece on it and an initial piece has been selected:
       handleMove(initial, code);
       setInitial(null);
-      toggleTurn();
     } else if (
       piece &&
       initial &&
@@ -90,7 +92,6 @@ export const Tile: FC<ITileProps> = ({
       // if tile has a piece on it and that piece is not at the same position as the initially selected piece, and is not the same color, and an inital piece has been selected:
       handleMove(initial, code);
       setInitial(null);
-      toggleTurn();
     } else if (
       (piece &&
         initial &&
