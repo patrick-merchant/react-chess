@@ -8,6 +8,7 @@ import {
   checkIfPieceInWay,
 } from "../move-constraints/move-constraints";
 import { checkForCheck, enforceCheck } from "../check-handling/check-for-check";
+import { checkForCheckmate } from "../check-handling/checkmate";
 
 export const Tile: FC<ITileProps> = ({
   code,
@@ -36,15 +37,15 @@ export const Tile: FC<ITileProps> = ({
   }, [initial]);
 
   const handleMove = (startPosition: string, endPosition: string) => {
-    const pieceToMove = statefulPieces.get(startPosition);
+    const movePiece = statefulPieces.get(startPosition);
 
-    if (pieceToMove) {
+    if (movePiece) {
       // check if there is a piece in the way of the move's path
       const isPieceInWay = checkIfPieceInWay(
         startPosition,
         endPosition,
         statefulPieces,
-        pieceToMove
+        movePiece
       );
       if (isPieceInWay) {
         console.log("Invalid move: Piece in move path");
@@ -53,7 +54,7 @@ export const Tile: FC<ITileProps> = ({
 
       // check if the move is compatible with the piece's abilities
       const canPiecePerformMove = checkPieceMoveAbility(
-        pieceToMove,
+        movePiece,
         startPosition,
         endPosition,
         statefulPieces
@@ -64,11 +65,11 @@ export const Tile: FC<ITileProps> = ({
       }
 
       let tempStateful = new Map(statefulPieces);
-      tempStateful.set(endPosition, pieceToMove);
+      tempStateful.set(endPosition, movePiece);
       tempStateful.delete(startPosition);
 
       // check for check
-      if (enforceCheck(pieceToMove, tempStateful)) {
+      if (enforceCheck(movePiece, tempStateful)) {
         console.log(
           "Invalid move: You cannot make a move that puts you in check"
         );
@@ -84,8 +85,12 @@ export const Tile: FC<ITileProps> = ({
       setStatefulPieces(tempStateful);
       toggleTurn();
 
-      if (checkForCheck(pieceToMove, tempStateful)) {
-        console.log("Check!");
+      if (checkForCheck(movePiece, tempStateful)) {
+        if (checkForCheckmate(movePiece, tempStateful)) {
+          console.log("King can't move - block or take");
+        } else {
+          console.log("Check!");
+        }
       }
     }
   };

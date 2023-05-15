@@ -96,8 +96,6 @@ export const enforceCheck = (
     tempStatefulPieces
   );
 
-  console.log(playerKingPosition, " ", playerKingPiece);
-
   // get opponent's pieces
   const opponentsPieces = filterMapByValue(
     tempStatefulPieces,
@@ -111,7 +109,6 @@ export const enforceCheck = (
     playerKingPosition,
     tempStatefulPieces
   );
-  console.log(result);
 
   return result;
 };
