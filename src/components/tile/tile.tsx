@@ -7,7 +7,7 @@ import {
   checkPieceMoveAbility,
   checkIfPieceInWay,
 } from "../move-constraints/move-constraints";
-import { enforceCheck } from "../check-handling/check-for-check";
+import { checkForCheck, enforceCheck } from "../check-handling/check-for-check";
 
 export const Tile: FC<ITileProps> = ({
   code,
@@ -69,7 +69,9 @@ export const Tile: FC<ITileProps> = ({
 
       // check for check
       if (enforceCheck(pieceToMove, tempStateful)) {
-        console.log("Invalid move: You cannot move into check");
+        console.log(
+          "Invalid move: You cannot make a move that puts you in check"
+        );
         return;
       }
 
@@ -81,6 +83,10 @@ export const Tile: FC<ITileProps> = ({
 
       setStatefulPieces(tempStateful);
       toggleTurn();
+
+      if (checkForCheck(pieceToMove, tempStateful)) {
+        console.log("Check!");
+      }
     }
   };
 
