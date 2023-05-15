@@ -26,3 +26,11 @@ Need to add:
 - Chess Clock?
 - Database to help sessions persist , or save games.
 - "Beginner mode" - shows available moves.
+
+## Checking for check:
+
+- When do we check for check:
+  - to constrain each move - use tempStatefulPieces, after other checks but before change in state.
+  - to notify?
+  - to check for checkmate?
+    - For this use-case we need a separate function which notifies when you're in check. Combine this with the existing func, iterated for all King moves, and we've checked for checkmate.
