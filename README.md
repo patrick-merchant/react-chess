@@ -34,3 +34,6 @@ Need to add:
   - to notify?
   - to check for checkmate?
     - For this use-case we need a separate function which notifies when you're in check. Combine this with the existing func, iterated for all King moves, and we've checked for checkmate.
+    - but we need to check, not just if the king can move out of check, but if any other piece can block/take.
+      - for blocking, get moves-in-path (return from check function?). Iterate through all pieces on same side as King, iterate through each square in path (O^2) - check if move is possible for that piece.
+      - for taking, do same thing but with location of threatening piece (also return from check function).
