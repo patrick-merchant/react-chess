@@ -174,17 +174,11 @@ export const checkPieceMoveAbility = (
   return false;
 };
 
-export const checkIfPieceInWay = (
+export const getSquaresInPath = (
   startPosition: string,
   endPosition: string,
-  statefulPieces: Map<string, PieceClass>,
-  pieceToMove: PieceClass
-): boolean => {
-  // Not an issue for Knights.
-  if (pieceToMove.getType() === PieceType.KNIGHT) {
-    return false;
-  }
-
+  statefulPieces: Map<string, PieceClass>
+): Array<string> => {
   let allowedMoves = new Array<string>();
   // All other pieces will move diagonally, horizontally, or vertically.
   if (isMoveVertical(startPosition, endPosition)) {
@@ -431,6 +425,25 @@ export const checkIfPieceInWay = (
       }
     }
   }
+  return allowedMoves;
+};
+
+export const checkIfPieceInWay = (
+  startPosition: string,
+  endPosition: string,
+  statefulPieces: Map<string, PieceClass>,
+  pieceToMove: PieceClass
+) => {
+  // Not an issue for Knights.
+  if (pieceToMove.getType() === PieceType.KNIGHT) {
+    return false;
+  }
+
+  const allowedMoves = getSquaresInPath(
+    startPosition,
+    endPosition,
+    statefulPieces
+  );
 
   if (allowedMoves.includes(endPosition)) {
     return false;

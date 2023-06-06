@@ -1,6 +1,7 @@
 import {
   checkIfPieceInWay,
   checkPieceMoveAbility,
+  getSquaresInPath,
 } from "../move-constraints/move-constraints";
 import { PieceClass } from "../piece/class";
 import { PieceType } from "../piece/types";
@@ -79,6 +80,50 @@ export const checkIfKingCouldBeTaken = (
         )
       ) {
         return true;
+      }
+    }
+  }
+  return false;
+};
+
+export const checkIfCheckCanBeBlocked = (
+  threatPiecePosition: string,
+  playerKingPosition: string,
+  statefulPieces: Map<string, PieceClass>,
+  playersPieces: Map<string, PieceClass>
+) => {
+  // get squares function currently returns path including endPosition - need to rule this out here then
+  const squaresToBlock = getSquaresInPath(
+    threatPiecePosition,
+    playerKingPosition,
+    statefulPieces
+  );
+  console.log("SQUARES2BLOCK", squaresToBlock);
+
+  // check if any of player's pieces could block check
+  for (const [position, playerPiece] of playersPieces) {
+    // loop through whole array except last item (as this is king position)
+    for (let i = 0; i < squaresToBlock.length - 1; i++) {
+      if (
+        !checkIfPieceInWay(
+          position,
+          squaresToBlock[i],
+          statefulPieces,
+          playerPiece
+        ) &&
+        checkPieceMoveAbility(
+          playerPiece,
+          position,
+          squaresToBlock[i],
+          statefulPieces
+        )
+      ) {
+        let postTakeStateful = new Map(statefulPieces);
+        postTakeStateful.set(squaresToBlock[i], playerPiece);
+        postTakeStateful.delete(position);
+        if (!enforceCheck(playerPiece, postTakeStateful)) {
+          return true;
+        }
       }
     }
   }

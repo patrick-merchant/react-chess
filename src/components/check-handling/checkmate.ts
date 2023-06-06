@@ -1,6 +1,7 @@
 import { letters, numbers } from "../../payloads/tiles";
 import { PieceClass } from "../piece/class";
 import {
+  checkIfCheckCanBeBlocked,
   checkIfThreatCouldBeTaken,
   enforceCheck,
   filterMapByValue,
@@ -31,7 +32,24 @@ export const checkForCheckmate = (
     statefulPieces
   );
   if (canThreatBeTaken) {
+    console.log("THREAT CAN BE TAKEN");
     return false;
+  } else {
+    console.log("THREAT CANNOT BE TAKEN");
+  }
+
+  // can check be blocked by another of the king-player's pieces?
+  const canCheckBeBlocked = checkIfCheckCanBeBlocked(
+    pieceJustMovedPosition,
+    oppKingPosition,
+    statefulPieces,
+    opponentsPieces
+  );
+  if (canCheckBeBlocked) {
+    console.log("CHECK CAN BE BLOCKED");
+    return false;
+  } else {
+    console.log("CHECK CANNOT BE BLOCKED");
   }
 
   // can king move out of check?
@@ -72,8 +90,11 @@ export const checkForCheckmate = (
     tempStateful.set(possKingMove, oppKingPiece);
     tempStateful.delete(oppKingPosition);
     if (!enforceCheck(oppKingPiece, tempStateful)) {
+      console.log("KING CAN MOVE OUT OF CHECK");
+
       return false;
     }
+    console.log("KING CANNOT MOVE OUT OF CHECK");
   }
   return true;
 };

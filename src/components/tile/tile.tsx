@@ -87,7 +87,7 @@ export const Tile: FC<ITileProps> = ({
 
       if (checkForCheck(movePiece, tempStateful)) {
         if (checkForCheckmate(movePiece, tempStateful, endPosition)) {
-          console.log("King can't move and threatening piece can't be taken - block");
+          console.log("Checkmate!");
         } else {
           console.log("Check!");
         }
