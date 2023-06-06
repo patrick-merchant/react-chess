@@ -1,10 +1,16 @@
 import { letters, numbers } from "../../payloads/tiles";
 import { PieceClass } from "../piece/class";
-import { enforceCheck, getOppKing } from "./check-for-check";
+import {
+  checkIfThreatCouldBeTaken,
+  enforceCheck,
+  filterMapByValue,
+  getOppKing,
+} from "./check-for-check";
 
 export const checkForCheckmate = (
   pieceJustMoved: PieceClass,
-  statefulPieces: Map<string, PieceClass>
+  statefulPieces: Map<string, PieceClass>,
+  pieceJustMovedPosition: string
 ) => {
   // get position of king currently in check.
   const { oppKingPosition, oppKingPiece } = getOppKing(
@@ -12,6 +18,23 @@ export const checkForCheckmate = (
     statefulPieces
   );
 
+  // get opponent's pieces
+  const opponentsPieces = filterMapByValue(
+    statefulPieces,
+    (piece) => piece.getIsWhite() == oppKingPiece.getIsWhite()
+  );
+
+  // can piece threatening King be taken?
+  const canThreatBeTaken = checkIfThreatCouldBeTaken(
+    opponentsPieces,
+    pieceJustMovedPosition,
+    statefulPieces
+  );
+  if (canThreatBeTaken) {
+    return false;
+  }
+
+  // can king move out of check?
   const possKingMoves = new Array<string>();
 
   const positionsMatrix = [

@@ -85,6 +85,38 @@ export const checkIfKingCouldBeTaken = (
   return false;
 };
 
+export const checkIfThreatCouldBeTaken = (
+  playersPieces: Map<string, PieceClass>,
+  threatPiecePosition: string,
+  statefulPieces: Map<string, PieceClass>
+) => {
+  // check if any of player's pieces could take threatPiece
+  for (const [position, playerPiece] of playersPieces) {
+    if (
+      !checkIfPieceInWay(
+        position,
+        threatPiecePosition,
+        statefulPieces,
+        playerPiece
+      ) &&
+      checkPieceMoveAbility(
+        playerPiece,
+        position,
+        threatPiecePosition,
+        statefulPieces
+      )
+    ) {
+      let postTakeStateful = new Map(statefulPieces);
+      postTakeStateful.set(threatPiecePosition, playerPiece);
+      postTakeStateful.delete(position);
+      if (!enforceCheck(playerPiece, postTakeStateful)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
 // takes in piece player is about to move, checks if moving it would put/leave player in check
 export const enforceCheck = (
   pieceToMove: PieceClass | null,
