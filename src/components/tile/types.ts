@@ -13,4 +13,8 @@ export interface ITileProps {
   setStatefulPieces: React.Dispatch<
     React.SetStateAction<Map<string, PieceClass>>
   >;
+  movedKings: Array<string>;
+  setMovedKings: React.Dispatch<React.SetStateAction<Array<string>>>;
+  movedRooks: Array<string>;
+  setMovedRooks: React.Dispatch<React.SetStateAction<Array<string>>>;
 }

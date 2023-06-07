@@ -13,6 +13,8 @@ export const Board: FC<IBoardProps> = () => {
   const [isWhiteTurn, setIsWhiteTurn] = useState(true);
   const [takenPieces, setTakenPieces] = useState(new Array<PieceClass>());
   const [statefulPieces, setStatefulPieces] = useState(addPieces());
+  const [movedKings, setMovedKings] = useState(new Array<string>());
+  const [movedRooks, setMovedRooks] = useState(new Array<string>());
 
   const tiles = generateTileCodes();
 
@@ -46,6 +48,10 @@ export const Board: FC<IBoardProps> = () => {
               setTakenPieces={setTakenPieces}
               statefulPieces={statefulPieces}
               setStatefulPieces={setStatefulPieces}
+              movedKings={movedKings}
+              setMovedKings={setMovedKings}
+              movedRooks={movedRooks}
+              setMovedRooks={setMovedRooks}
             />
           ))}
         </div>

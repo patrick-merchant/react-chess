@@ -9,6 +9,12 @@ import {
 } from "../move-constraints/move-constraints";
 import { checkForCheck, enforceCheck } from "../check-handling/check-for-check";
 import { checkForCheckmate } from "../check-handling/checkmate";
+import { PieceType } from "../piece/types";
+import {
+  castleClickedSquares,
+  castleRookTargetSquares,
+} from "../../payloads/castling";
+import { checkForCastle } from "../move-constraints/castle";
 
 export const Tile: FC<ITileProps> = ({
   code,
@@ -21,6 +27,10 @@ export const Tile: FC<ITileProps> = ({
   setStatefulPieces,
   isWhiteTurn,
   setIsWhiteTurn,
+  movedKings,
+  setMovedKings,
+  movedRooks,
+  setMovedRooks,
 }) => {
   const [isInitial, setIsInitial] = useState(false);
 
@@ -52,6 +62,22 @@ export const Tile: FC<ITileProps> = ({
         return;
       }
 
+      // handle castle
+      checkForCastle(
+        movePiece,
+        movedKings,
+        startPosition,
+        endPosition,
+        movedRooks,
+        statefulPieces,
+        setStatefulPieces,
+        toggleTurn,
+        setMovedRooks,
+        setMovedKings
+      );
+
+      // handle en passant
+
       // check if the move is compatible with the piece's abilities
       const canPiecePerformMove = checkPieceMoveAbility(
         movePiece,
@@ -82,8 +108,27 @@ export const Tile: FC<ITileProps> = ({
         takenPiece && setTakenPieces([...takenPieces, takenPiece]);
       }
 
+      // take Piece
       setStatefulPieces(tempStateful);
       toggleTurn();
+
+      // note whether king or rook has moved (for castling purposes)
+      if (
+        movePiece.getType() === PieceType.KING &&
+        !movedKings.includes(startPosition)
+      ) {
+        setMovedKings([...movedKings, startPosition]);
+      } else if (
+        movePiece.getType() == PieceType.ROOK &&
+        !movedRooks.includes(castleClickedSquares.get(endPosition) as string)
+      ) {
+        if (castleClickedSquares.get(endPosition) != undefined) {
+          setMovedRooks([
+            ...movedRooks,
+            castleClickedSquares.get(endPosition) as string,
+          ]);
+        }
+      }
 
       if (checkForCheck(movePiece, tempStateful)) {
         if (checkForCheckmate(movePiece, tempStateful, endPosition)) {
